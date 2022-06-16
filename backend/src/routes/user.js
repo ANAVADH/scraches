@@ -1,15 +1,12 @@
-const express = require('express')
+const express = require('express');
+const { signup, signin, requireSignIn } = require('../controller/user');
 const route = express.Router();
 
+route.post('/signup',signup)
 
-route.post('/signin',(req,res)=>{
+route.post('/signin',signin)
 
+route.post('/profile',requireSignIn,(req,res)=>{
+    res.status(200).json({user:"profile"})
 })
-
-route.post('/signup',(req,res)=>{
-
-})
-
-
-
 module.exports = route
