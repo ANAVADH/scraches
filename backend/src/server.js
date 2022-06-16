@@ -6,6 +6,7 @@ env.config()
 const PORT = process.env.PORT
 //routes
 const userAuth = require('./routes/user')
+const adminAuth = require('./routes/admin/user')
 //middleware to pass json used insted app.use(express.json()) - to maupulate data upto my requirement
 const bodyParser = require('body-parser');
 
@@ -20,13 +21,11 @@ mongoose.connect(`mongodb+srv://${MongoUser}:${MongoPassword}@cluster0.d7y3h.mon
 }).catch(err =>{
     console.log(err);
 })
-
-
-
 //middleware to pass json used insted app.use(express.json()) - to maupulate data upto my requirement
 app.use(bodyParser.json())
 
 app.use('/api', userAuth)
+app.use('/api', adminAuth)
 
 
 app.listen(PORT,()=>{

@@ -1,26 +1,27 @@
- const User = require('../models/user')
- const jwt = require('jsonwebtoken')
- const SECKEY = process.env.JWT_SECKEY
- // creating users 
- exports.signup = (req,res)=>{
+const User = require('../../models/user')
+const jwt = require('jsonwebtoken')
+const SECKEY = process.env.JWT_SECKEY
+// creating users 
+exports.signup = (req,res)=>{
     User.findOne({email:req.body.email}).exec((err,user)=>{
         if(user)
             return res.status(400).json({
-                message : "user alredy exist"
+                message : "Admin alredy exist"
             });
-            const {firstName,lastName,email,password} = req.body;
+            const {firstName,lastName,email,password,role} = req.body;
             const _user = new User({
                 firstName,
                 lastName,
                 email,
                 password,
-                username:Math.random().toString()
+                username:Math.random().toString(),
+                role:admin
             });
                
             _user.save((err,data)=>{
                 if(data){
                     res.status(201).json({
-                        message:"User Created Successfully"
+                        message:"Admin Created Successfully"
                     })
                 }
                 if(err){
@@ -30,16 +31,18 @@
                 }
              })
         });
-     }
+        } 
 
-//signin authentication using jwt
+
+        //signin authentication using jwt
+        
 
 exports.signin = (req,res)=>{
    
     User.findOne({email:req.body.email}).exec((err,user)=>{
         if(err) return res.status(400).json({err}) 
         if(user){
-            if(user.authenticate(req.body.password)){
+            if(user.authenticate(req.body.password) && user.role === 'admin'){
                         
             const token = jwt.sign({_id:user._id},SECKEY,{expiresIn:"1h"})
             const {_id,firstName,lastName,email,role,fullName} = user
@@ -70,4 +73,5 @@ exports.requireSignIn = (req,res,next)=>{
     const user = jwt.verify(token,SECKEY)
     req.user = user;
     next();
+    res.sendStatus(200);
 }
