@@ -3,7 +3,7 @@
  const SECKEY = process.env.JWT_SECKEY
  // creating users 
  exports.signup = (req,res)=>{
-    User.findOne({email:req.body.email}).exec((err,user)=>{
+User.findOne({email:req.body.email}).exec((err,user)=>{
         if(user)
             return res.status(400).json({
                 message : "user alredy exist"
@@ -31,8 +31,7 @@
              })
         });
      }
-
-//signin authentication using jwt
+     //signin authentication using jwt
 
 exports.signin = (req,res)=>{
    
@@ -41,7 +40,7 @@ exports.signin = (req,res)=>{
         if(user){
             if(user.authenticate(req.body.password)){
                         
-            const token = jwt.sign({_id:user._id},SECKEY,{expiresIn:"1h"})
+            const token = jwt.sign({_id:user._id, role:user.role},SECKEY,{expiresIn:"1h"})
             const {_id,firstName,lastName,email,role,fullName} = user
                  res.status(200).json({
                     token,
@@ -64,10 +63,3 @@ exports.signin = (req,res)=>{
 
 }
 
-
-exports.requireSignIn = (req,res,next)=>{
-    const token = req.headers.authorization.split('')[1];
-    const user = jwt.verify(token,SECKEY)
-    req.user = user;
-    next();
-}

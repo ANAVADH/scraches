@@ -15,7 +15,7 @@ exports.signup = (req,res)=>{
                 email,
                 password,
                 username:Math.random().toString(),
-                role:admin
+                role:"admin"
             });
                
             _user.save((err,data)=>{
@@ -32,12 +32,9 @@ exports.signup = (req,res)=>{
              })
         });
         } 
-
-
-        //signin authentication using jwt
-        
-
-exports.signin = (req,res)=>{
+ //signin authentication using jwt
+    
+    exports.signin = (req,res)=>{
    
     User.findOne({email:req.body.email}).exec((err,user)=>{
         if(err) return res.status(400).json({err}) 
@@ -50,7 +47,7 @@ exports.signin = (req,res)=>{
                     token,
                     user:{
                         _id,firstName,lastName,email,role,fullName
-                 }
+                    }
                  });    
                  
         
@@ -63,15 +60,5 @@ exports.signin = (req,res)=>{
         }else{
             return res.status(400).json({message:"something Went Wrong"})
         }
-    })
+    })}
 
-}
-
-
-exports.requireSignIn = (req,res,next)=>{
-    const token = req.headers.authorization.split('')[1];
-    const user = jwt.verify(token,SECKEY)
-    req.user = user;
-    next();
-    res.sendStatus(200);
-}
