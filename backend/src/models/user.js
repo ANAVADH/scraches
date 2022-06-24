@@ -46,9 +46,9 @@ profilePicture:{type:String}
 },{timestamps:true})
 
 
-userSchema.virtual('password').set(function(password){
-    this.hash_password = bcrypt.hashSync(password,10)
-})
+// userSchema.virtual('password').set(function(password){
+//     this.hash_password = bcrypt.hashSync(password,10)
+// })
 
 userSchema.virtual('fullName').get(function(){
     return `${this.firstName} ${this.lastName}`
@@ -57,6 +57,9 @@ userSchema.virtual('fullName').get(function(){
 userSchema.methods = {
     authenticate: async function(password){
         return await bcrypt.compareSync(password,this.hash_password)
+
+
+
 
     },
 }

@@ -8,6 +8,7 @@ const PORT = process.env.PORT
 const userAuth = require('./routes/user')
 const adminAuth = require('./routes/admin/user')
 const categoryRoutes = require('./routes/category') 
+const productRoutes = require('./routes/product') 
 //middleware to pass json used insted app.use(express.json()) - to maupulate data upto my requirement
 // const bodyParser = require('body-parser');
 
@@ -30,6 +31,7 @@ app.use(express.json())  //this can also be used
 app.use('/api', userAuth)
 app.use('/api', adminAuth)
 app.use('/api',categoryRoutes)
+app.use('/api',productRoutes)
 
 app.listen(PORT,()=>{
     console.log(`server is runing on  http://localhost:${PORT}`);

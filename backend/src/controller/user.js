@@ -1,7 +1,7 @@
  const User = require('../models/user')
  const jwt = require('jsonwebtoken')
  const SECKEY = process.env.JWT_SECKEY
- // creating users 
+ // creating users
  exports.signup = (req,res)=>{
 User.findOne({email:req.body.email}).exec((err,user)=>{
         if(user)
@@ -27,10 +27,8 @@ User.findOne({email:req.body.email}).exec((err,user)=>{
                     res.status(400).json({
                         message:"something went wrong"
                     })
-                }
-             })
-        });
-     }
+                }})
+            });}
      //signin authentication using jwt
 
 exports.signin = (req,res)=>{
@@ -40,7 +38,7 @@ exports.signin = (req,res)=>{
         if(user){
             if(user.authenticate(req.body.password)){
                         
-            const token = jwt.sign({_id:user._id, role:user.role},SECKEY,{expiresIn:"1h"})
+            const token = jwt.sign({_id:user._id},SECKEY,{expiresIn:"1h"})
             const {_id,firstName,lastName,email,role,fullName} = user
                  res.status(200).json({
                     token,
